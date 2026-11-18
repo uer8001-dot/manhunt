@@ -49,7 +49,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install --upgrade cython==0.29.33 buildozer
 
-    - name: Build APK with Buildozer
+    - name: Accept Android SDK Licenses & Build
       run: |
         buildozer -v android debug
 
