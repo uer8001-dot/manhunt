@@ -39,18 +39,42 @@ jobs:
           libssl-dev \
           openjdk-17-jdk \
           unzip \
+          zip \
           ant \
           autoconf \
           libtool \
-          pkg-config
+          pkg-config \
+          lld
 
     - name: Install Python Dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install --upgrade cython==0.29.33 buildozer
+        pip install --upgrade cython==0.29.33 buildozer setuptools wheel
 
-    - name: Accept Android SDK Licenses & Build
+    - name: Prepare Buildozer & Ensure aidl
       run: |
+        yes | buildozer android debug || true
+        SDK_DIR="$HOME/.buildozer/android/platform/android-sdk"
+        if [ -d "$SDK_DIR/cmdline-tools/latest/bin" ]; then
+          yes | "$SDK_DIR/cmdline-tools/latest/bin/sdkmanager" --sdk_root="$SDK_DIR" "build-tools;33.0.2" "platforms;android-33" || true
+        fi
+        AIDL_PATH=$(find "$HOME/.buildozer" -name "aidl" -type f 2>/dev/null | head -n 1)
+        if [ -n "$AIDL_PATH" ]; then
+          AIDL_DIR=$(dirname "$AIDL_PATH")
+          echo "export PATH=\"$AIDL_DIR:\$PATH\"" >> "$HOME/.bashrc"
+          export PATH="$AIDL_DIR:$PATH"
+          which aidl
+        else
+          echo "aidl bulunamadi, SDK dizinleri kontrol ediliyor:"
+          find "$HOME/.buildozer" -maxdepth 5 2>/dev/null || true
+        fi
+
+    - name: Build APK with Buildozer
+      run: |
+        AIDL_PATH=$(find "$HOME/.buildozer" -name "aidl" -type f 2>/dev/null | head -n 1)
+        if [ -n "$AIDL_PATH" ]; then
+          export PATH="$(dirname "$AIDL_PATH"):$PATH"
+        fi
         buildozer -v android debug
 
     - name: Upload APK Artifact
