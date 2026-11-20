@@ -11,8 +11,7 @@ source.include_exts = py,png,jpg,kv,atlas,json
 version = 1.0.0
 
 # ── Bağımlılıklar (Requirements) ──────────────────────────────────────────────
-# Tüm gerekli kütüphaneler virgülle ayrılmış şekilde girilmiştir.
-requirements = python3==3.11.0,kivy==2.3.0,kivymd==1.2.0,plyer,requests,urllib3,certifi,idna,charset-normalizer,pillow,materialyoucolor,exceptiongroup,asyncgui,asynckivy
+requirements = python3==3.11.0,kivy==2.3.0,kivymd==1.2.0,plyer,requests,urllib3,certifi,idna,charset-normalizer,pillow
 
 # ── Android İzinleri ──────────────────────────────────────────────────────────
 android.permissions = android.permission.ACCESS_FINE_LOCATION,android.permission.ACCESS_COARSE_LOCATION,android.permission.INTERNET,android.permission.VIBRATE,android.permission.ACCESS_NETWORK_STATE
